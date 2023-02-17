@@ -1,5 +1,6 @@
 package com.example.futurev1
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
 
-class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
+class ItemAdapter() : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     var itemList = ArrayList<Item>()
 
 
@@ -20,7 +21,8 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
         val binding = RowBinding.bind(item)
 
         fun bind(item : Item){
-
+            var data = MainActivity()
+            data.readJson()
             Picasso.get().load(item.iconUrl).into(binding.icon)
             binding.name.text = item.name
         }

@@ -3,11 +3,20 @@ package com.example.futurev1
 import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request.Method.GET
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.futurev1.databinding.ActivityMainBinding
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Request
+import kotlinx.serialization.json.Json
 import org.json.JSONArray
+import retrofit2.Call
 import java.io.IOException
 import java.io.InputStream
 
@@ -15,13 +24,37 @@ class MainActivity : AppCompatActivity() {
     lateinit var bin : ActivityMainBinding
     private var adapter = ItemAdapter()
     var arr = arrayListOf<String>()
-
+    val url = "http://mobile-olympiad-trajectory.hb.bizmrg.com/semi-final-data.json/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bin = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bin.root)
         init()
+
+        val serviceGenerator = ServiceGenerator.buildService(ApiService::class.java)
+        val call = serviceGenerator.getPosts()
+
+        call.enqueue(object : retrofit2.Callback<MutableList<Item>> {
+            override fun onResponse(
+                call: Call<MutableList<Item>>,
+                response: retrofit2.Response<MutableList<Item>>
+            ) {
+                if(response.isSuccessful){
+                    Log.e("success" , "succes")
+                }
+
+            }
+
+            override fun onFailure(call: Call<MutableList<Item>>, t: Throwable) {
+                t.printStackTrace()
+                Log.e("error", "error")
+
+            }
+
+
+        })
+
     }
 
     private fun init(){
@@ -31,9 +64,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     fun readJson(){
 
-        var myData = Item()
+        //val projects = Json.decodeFromString<Item>(assets.open("projects.json"))
+
+        var item = Item(null, null, null, null)
 
         var json : String? = null
         try {
@@ -44,10 +80,11 @@ class MainActivity : AppCompatActivity() {
 
             for(i in 0..jsonarr.length()){
                 var jsonobj = jsonarr.getJSONObject(i)
-                myData.name = jsonobj.getString("name")
-                myData.description = jsonobj.getString("description")
-                myData.iconUrl = jsonobj.getString("icon_url")
-                myData.serviceUrl = jsonobj.getString("service_url")
+                Log.d("MY", "${i}")
+                item.name = jsonobj.getString("name")
+                item.description = jsonobj.getString("description")
+                item.iconUrl = jsonobj.getString("icon_url")
+                item.serviceUrl = jsonobj.getString("service_url")
             }
 
 
