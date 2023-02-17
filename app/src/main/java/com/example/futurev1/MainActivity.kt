@@ -1,5 +1,7 @@
 package com.example.futurev1
-
+//Первый раз делаю такого рода приложение)
+//Ничего не вышло(
+//Не успел
 import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +24,6 @@ import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
     lateinit var bin : ActivityMainBinding
-    private var adapter = ItemAdapter()
     var arr = arrayListOf<String>()
     val url = "http://mobile-olympiad-trajectory.hb.bizmrg.com/semi-final-data.json/"
 
@@ -30,18 +31,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bin = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bin.root)
-        init()
+
 
         val serviceGenerator = ServiceGenerator.buildService(ApiService::class.java)
         val call = serviceGenerator.getPosts()
 
         call.enqueue(object : retrofit2.Callback<MutableList<Item>> {
             override fun onResponse(
-                call: Call<MutableList<Item>>,
-                response: retrofit2.Response<MutableList<Item>>
-            ) {
-                if(response.isSuccessful){
-                    Log.e("success" , "succes")
+                call: retrofit2.Call<MutableList<Item>>,
+                response: retrofit2.Response<MutableList<Item>>) {
+                    if(response.isSuccessful){
+                        Log.e("success" , "success")
+
+                        var adapter = ItemAdapter(response.body()!!)
+                        bin.rcView.layoutManager = LinearLayoutManager(this@MainActivity)
+                        bin.rcView.adapter = adapter
+
                 }
 
             }
@@ -57,44 +62,44 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun init(){
-        bin.apply {
-            rcView.layoutManager = LinearLayoutManager(this@MainActivity)
-            rcView.adapter = adapter
-        }
-    }
+//    private fun init(){
+//        bin.apply {
+//            rcView.layoutManager = LinearLayoutManager(this@MainActivity)
+//            rcView.adapter = adapter
+//        }
+//    }
 
 
-    fun readJson(){
-
-        //val projects = Json.decodeFromString<Item>(assets.open("projects.json"))
-
-        var item = Item(null, null, null, null)
-
-        var json : String? = null
-        try {
-            val inputStream: InputStream = assets.open("projects.json")
-            json = inputStream.bufferedReader().use { it.readText() }
-
-            var jsonarr = JSONArray(json)
-
-            for(i in 0..jsonarr.length()){
-                var jsonobj = jsonarr.getJSONObject(i)
-                Log.d("MY", "${i}")
-                item.name = jsonobj.getString("name")
-                item.description = jsonobj.getString("description")
-                item.iconUrl = jsonobj.getString("icon_url")
-                item.serviceUrl = jsonobj.getString("service_url")
-            }
-
-
-            var adpt = ArrayAdapter(this, R.layout.simple_list_item_1, arr)
-
-
-
-        }
-        catch (e : IOException){
-
-        }
-    }
+//    fun readJson(){
+//
+//        //val projects = Json.decodeFromString<Item>(assets.open("projects.json"))
+//
+//        var item = Item(null, null, null, null)
+//
+//        var json : String? = null
+//        try {
+//            val inputStream: InputStream = assets.open("projects.json")
+//            json = inputStream.bufferedReader().use { it.readText() }
+//
+//            var jsonarr = JSONArray(json)
+//
+//            for(i in 0..jsonarr.length()){
+//                var jsonobj = jsonarr.getJSONObject(i)
+//                Log.d("MY", "${i}")
+//                item.name = jsonobj.getString("name")
+//                item.description = jsonobj.getString("description")
+//                item.iconUrl = jsonobj.getString("icon_url")
+//                item.serviceUrl = jsonobj.getString("service_url")
+//            }
+//
+//
+//            var adpt = ArrayAdapter(this, R.layout.simple_list_item_1, arr)
+//
+//
+//
+//        }
+//        catch (e : IOException){
+//
+//        }
+//    }
 }

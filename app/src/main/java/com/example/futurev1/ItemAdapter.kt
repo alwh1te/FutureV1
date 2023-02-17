@@ -12,8 +12,8 @@ import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
 
-class ItemAdapter() : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
-    var itemList = ArrayList<Item>()
+class ItemAdapter(val item : MutableList<Item>) : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
+    //var itemList = ArrayList<Item>()
 
 
     class ItemHolder(item: View) : RecyclerView.ViewHolder(item){
@@ -21,8 +21,8 @@ class ItemAdapter() : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
         val binding = RowBinding.bind(item)
 
         fun bind(item : Item){
-            var data = MainActivity()
-            data.readJson()
+           // var data = MainActivity()
+           // data.readJson()
             Picasso.get().load(item.iconUrl).into(binding.icon)
             binding.name.text = item.name
         }
@@ -35,16 +35,16 @@ class ItemAdapter() : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(itemList[position])
+        return holder.bind(item[position])
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return item.size
     }
 
-    fun addItem(item : Item){
-        itemList.add(item)
-        notifyDataSetChanged()
-    }
+//    fun addItem(item : Item){
+//        itemList.add(item)
+//        notifyDataSetChanged()
+//    }
 
 }
