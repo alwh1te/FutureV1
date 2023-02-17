@@ -1,19 +1,13 @@
 package com.example.futurev1
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.futurev1.databinding.RowBinding
 import com.squareup.picasso.Picasso
-import org.json.JSONArray
-import java.io.IOException
-import java.io.InputStream
 
 class ItemAdapter(val item : MutableList<Item>) : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
-    //var itemList = ArrayList<Item>()
 
 
     class ItemHolder(item: View) : RecyclerView.ViewHolder(item){
@@ -21,8 +15,6 @@ class ItemAdapter(val item : MutableList<Item>) : RecyclerView.Adapter<ItemAdapt
         val binding = RowBinding.bind(item)
 
         fun bind(item : Item){
-           // var data = MainActivity()
-           // data.readJson()
             Picasso.get().load(item.iconUrl).into(binding.icon)
             binding.name.text = item.name
         }
@@ -42,9 +34,5 @@ class ItemAdapter(val item : MutableList<Item>) : RecyclerView.Adapter<ItemAdapt
         return item.size
     }
 
-//    fun addItem(item : Item){
-//        itemList.add(item)
-//        notifyDataSetChanged()
-//    }
 
 }
